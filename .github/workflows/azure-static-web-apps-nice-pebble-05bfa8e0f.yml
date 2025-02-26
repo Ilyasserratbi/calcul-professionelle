@@ -9,6 +9,13 @@ on:
     branches:
       - main
 
+name: Build and Deploy to Azure Static Web Apps
+
+on:
+  push:
+    branches:
+      - main  # Or any branch you're deploying from
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -19,25 +26,23 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '14'   # Specify the Node.js version you're using
 
       - name: Install dependencies
         run: |
-          cd my-app
           npm install
 
       - name: Build app
         run: |
-          cd my-app
-          npm run build
+          npm run build   # This command will create the build directory
 
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
         with:
-          app_location: '/my-app/build'   # Adjust to the build output directory
-          api_location: 'api'             # Adjust if you have an API
-          output_location: 'build'        # Adjust to the correct output location
+          app_location: '/'   # The root folder where package.json is
+          output_location: 'build'   # The build output folder
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+
 
 
   close_pull_request_job:
